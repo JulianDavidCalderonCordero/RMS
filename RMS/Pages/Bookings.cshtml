@@ -1,0 +1,73 @@
+﻿@page
+@model Web.Pages.BookingsModel
+@{
+    ViewData["Title"] = "Booking";
+}
+
+<div class="container mt-4">
+    <h2>@ViewData["Title"]</h2>
+
+    <!-- Create/Edit Booking Form -->
+    <div class="card">
+        <div class="card-body">
+            <form method="post">
+                <div class="form-group">
+                    <label asp-for="Booking.room_id" class="control-label">Room</label>
+                    <select asp-for="Booking.room_id" class="form-control" asp-items="Model.Rooms">
+                        <option value="">Select a room</option>
+                    </select>
+                    <span asp-validation-for="Booking.room_id" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Booking.date" class="control-label">Booking Date</label>
+                    <input asp-for="Booking.date" type="date" class="form-control" />
+                    <span asp-validation-for="Booking.date" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Booking.username" class="control-label">Username</label>
+                    <input asp-for="Booking.username" class="form-control" />
+                    <span asp-validation-for="Booking.username" class="text-danger"></span>
+                </div>
+
+                <button type="submit" class="btn btn-primary mt-3">Save</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Display List of Bookings -->
+    <div class="card mt-4">
+        <div class="card-header">
+            <h3>Booking List</h3>
+        </div>
+        <div class="card-body">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Room</th>
+                        <th>Booking Date</th>
+                        <th>Username</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var booking in Model.Bookings)
+                    {
+                        <tr>
+                            <td>@booking.room_id</td>
+                            <td>@booking.date.ToString("yyyy-MM-dd")</td>
+                            <td>@booking.username</td>
+                            <td>
+                                <a href="@Url.Page("Edit", new { id = booking.id })" class="btn btn-warning btn-sm">Edit</a>
+                                <form method="post" asp-page-handler="Delete" asp-route-id="@booking.id" class="d-inline">
+                                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

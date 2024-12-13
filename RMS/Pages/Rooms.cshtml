@@ -1,0 +1,71 @@
+﻿@page
+@model Web.Pages.RoomsModel
+@{
+	ViewData["Title"] = "Rooms";
+}
+
+<div class="container mt-4">
+    <h2>@ViewData["Title"]</h2>
+
+    <!-- Create/Edit Form -->
+    <div class="card">
+        <div class="card-body">
+            <form method="post">
+                <div class="form-group">
+                    <label asp-for="Room.name" class="control-label">Room Name</label>
+                    <input asp-for="Room.name" class="form-control" />
+                    <span asp-validation-for="Room.name" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Room.capacity" class="control-label">Capacity</label>
+                    <input asp-for="Room.capacity" type="number" class="form-control" />
+                    <span asp-validation-for="Room.capacity" class="text-danger"></span>
+                </div>
+
+                <div class="form-check">
+                    <input asp-for="Room.availability" type="checkbox" class="form-check-input" />
+                    <label class="form-check-label" for="Availability">Available</label>
+                </div>
+
+                <button type="submit" class="btn btn-primary mt-3">Save</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Display List of Rooms -->
+    <div class="card mt-4">
+        <div class="card-header">
+            <h3>Room List</h3>
+        </div>
+        <div class="card-body">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Capacity</th>
+                        <th>Available</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var room in Model.Rooms)
+                    {
+                        <tr>
+                            <td>@room.name</td>
+                            <td>@room.capacity</td>
+                            <td>@(room.availability ? "Yes" : "No")</td>
+                            <td>
+                                @Url.Page("Edit", new { id = room.id })
+                                <a href="@Url.Page("", new { id = room.id })" class="btn btn-warning btn-sm">Edit</a>
+                                <form method="post" asp-page-handler="Delete" asp-route-id="@room.id" class="d-inline">
+                                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
